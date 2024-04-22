@@ -8,6 +8,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      width: {
+        "64": "16rem",
+      },
+      height: {
+        "64": "16rem",
+      },
+      animation: {
+        pulse: "pulse 1s infinite",
+      },
+      keyframes: {
+        pulse: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.1)" },
+          "100%": { transform: "scale(1)" },
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -15,6 +31,8 @@ const config: Config = {
       },
     },
   },
+  variants: {},
   plugins: [],
 };
+
 export default config;
