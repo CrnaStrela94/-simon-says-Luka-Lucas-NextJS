@@ -30,11 +30,18 @@ const SimonGame: React.FC = () => {
     };
     const handleResetGame = () => {
         dispatch(resetGame());
+        setSuccessfulGamesCount(0);
     };
 
     const handleUserInput = (index: number) => {
         dispatch(addUserInput(index));
-        playSound((sounds as Record<string, HTMLAudioElement>)[`tone${index + 1}`]);
+        const soundKey = `tone${index + 1}`;
+        playSound(sounds[soundKey]);
+
+        // Check if the user's sequence matches the game's sequence up to this point
+        if (JSON.stringify(sequence.slice(0, userSequence.length + 1)) === JSON.stringify([...userSequence, index])) {
+            setSuccessfulGamesCount(prevCount => prevCount + 1); // Increment the counter
+        }
     };
 
 
@@ -44,6 +51,9 @@ const SimonGame: React.FC = () => {
                 setHighlightedButton(value);
                 setTimeout(() => {
                     setHighlightedButton(null);
+                    if (JSON.stringify(sequence.slice(0, index + 1)) === JSON.stringify(userSequence.slice(0, index + 1))) {
+                        setSuccessfulGamesCount(prevCount => prevCount + 1); // Increment the counter
+                    }
                 }, 500); // Highlight for 500ms
             }, 1000 * index); // Each button highlights 1 second after the previous
         });
@@ -56,9 +66,11 @@ const SimonGame: React.FC = () => {
     }, [gameStarted, sequence, dispatch, gameOver]);
 
     useEffect(() => {
-        if (gameOver && sequence.length === userSequence.length) {
-            setSuccessfulGamesCount(prevCount => prevCount + 1);
+        if (gameOver) {
             playSound(sounds.gameOver);
+            if (JSON.stringify(sequence) === JSON.stringify(userSequence)) {
+                setSuccessfulGamesCount(prevCount => prevCount + 1);
+            }
         }
     }, [gameOver, sequence, userSequence]);
 
