@@ -23,14 +23,13 @@ const SimonGame: React.FC = () => {
 
   useEffect(() => {
     if (gameStarted && !gameOver) {
-      // Display sequence
       sequence.forEach((buttonIndex, index) => {
         setTimeout(() => {
           setHighlightedButton(buttonIndex);
           setTimeout(() => {
             setHighlightedButton(null);
           }, 500);
-        }, index * 1000); // Adjust the delay as needed
+        }, index * 1000);
       });
     }
   }, [gameStarted, gameOver, sequence]);
